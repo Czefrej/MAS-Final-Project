@@ -16,8 +16,10 @@ class CreateCategoryTable extends Migration
         Schema::create('category', function (Blueprint $table) {
             $table->id()->unique()->autoIncrement();
             $table->string("name",100)->nullable(false);
-            $table->integer("parent_id")->nullable(true)->default(null);
+            $table->unsignedBigInteger("parent_id")->nullable(true)->default(null);
             $table->timestamps();
+
+            $table->foreign('parent_id')->references("id")->on("category")->onDelete("cascade");
         });
     }
 

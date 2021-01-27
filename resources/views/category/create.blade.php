@@ -9,13 +9,34 @@
 
 @section('content')
     <div class="login-clean">
-        <form method="post"><h2 class="sr-only">Discount</h2>
+
+        <form method="post" action="{{route("category.store")}}"><h2 class="sr-only">Category</h2>
+            @csrf
             <div class="illustration"><ion-icon name="apps-outline"></ion-icon></div>
+            @if (count($errors) > 0)
+                <div class="alert alert-danger">
+                    <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            @if(session()->has('message'))
+                <div class="alert alert-success">
+                    {{ session()->get('message') }}
+                </div>
+            @endif
             <div class="form-group"><input class="form-control" type="text" name="name" placeholder="Name"></div>
             <div class="form-group">
-                <select class="form-control">
-                    <option>Category</option>
-                    <option>First</option>
+                <label for="parent_id">End date</label>
+                <select name="parent_id" class="form-control">
+                    <option value="">No parent</option>
+                    @foreach($categories as $c)
+                        <option value="{{$c->id}}">{{$c->name}}</option>
+                    @endforeach
                 </select>
             </div>
 

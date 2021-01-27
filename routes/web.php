@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::resource('category', \App\Http\Controllers\CategoryController::class);
+
 Route::get('/', function () {
     return view('home');
 });
@@ -33,6 +35,6 @@ Route::get('/discount/create', function () {
     return view('discount.create');
 });
 
-Route::get('/category/create', function () {
-    return view('category.create');
-});
+//Route::get('/category/create', function () {
+//    return view('category.create');
+//});
