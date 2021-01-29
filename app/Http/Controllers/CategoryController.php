@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
 
@@ -85,8 +86,30 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        //
-        dd($id);
+
+        $validator = Validator::make(["id"=>$id], [
+            'id' => ['required', 'numeric'],
+        ]);
+
+        if($validator->fails()){
+            return redirect(route("category.index"))->withErrors($validator);
+        }
+
+        try {
+            $category = Category::where("id", $id)->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            throw ValidationException::withMessages(['id' => 'You have to provide id of a existing category']);
+        }
+
+
+        $categories = Category::where('id',"!=",$category->id)->where(function($query) use($category){
+            $query->where('parent_id','!=',$category->id)
+                ->orWhereNull('parent_id','is',null);
+        })->get();
+
+
+        return view('category.edit')->with(["category"=>$category,"categories"=>$categories]);
+
     }
 
     /**
@@ -98,8 +121,27 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
-        dd($id);
+        $validateData = $request->validate([
+            'name'=>'required|max:100',
+            'parent_id'=>'numeric|nullable'
+        ]);
+
+        if($request->parent_id != null) {
+            try {
+                $parent = Category::where("id", $request->parent_id)->firstOrFail();
+                if($parent->parent_id == $id)
+                    throw ValidationException::withMessages(['parent_id' => 'Parent category cannot be subcategory of this category']);
+            } catch (ModelNotFoundException $e) {
+                throw ValidationException::withMessages(['parent_id' => 'You have to provide id of a existing category']);
+            }
+        }
+
+        $category = Category::find($id);
+        $category->name = $request->name;
+        $category->parent_id = $request->parent_id;
+        $category->save();
+
+        return redirect(route("category.index"))->with('message', 'Category was successfully updated.');
     }
 
     /**

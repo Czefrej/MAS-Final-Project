@@ -31,14 +31,16 @@
             @endif
             <div class="form-group"><input class="form-control" type="text" name="name" placeholder="Name"></div>
             <div class="form-group">
-                <label for="parent_id">End date</label>
+                <label for="parent_id">Parent category</label>
                 <select name="parent_id" class="form-control">
                     <option value="">No parent</option>
                     @foreach($categories as $c)
-                        <option value="{{$c->id}}">{{$c->name}}</option>
+                        <option value="{{$c->id}}">{{$c->name}} ID : {{$c->id}}</option>
                     @endforeach
                 </select>
             </div>
+
+            <a class="forgot" href="{{route("category.index")}}">Get back to category list.</a>
 
             <div class="form-group">
                 <button class="btn btn-primary btn-block" type="submit">Create a category</button>
