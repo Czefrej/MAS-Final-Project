@@ -15,6 +15,13 @@ class Offer extends Model
         'description',
         'stock',
         'creator_id',
-        ''
+        'category_id'
     ];
+
+    protected $table = 'offer';
+    protected $primaryKey = 'id';
+
+    public function category(){
+        return $this->belongsTo(Category::class);
+    }
 }
