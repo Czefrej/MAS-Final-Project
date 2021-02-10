@@ -31,7 +31,7 @@
                     {{ session()->get('message') }}
                 </div>
             @endif
-            <div class="form-group"><input class="form-control" type="text" name="name" value="{{$category->name}}" placeholder="{{$category->name}}"></div>
+            <div class="form-group"><input class="form-control" type="text" name="name" value="{{$category->name}}" placeholder="Name"></div>
             <div class="form-group">
                 <label for="parent_id">Parent category</label>
                 <select name="parent_id" class="form-control">

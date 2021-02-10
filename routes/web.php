@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::resource('category', \App\Http\Controllers\CategoryController::class);
 
+Route::resource('offer', \App\Http\Controllers\OfferController::class);
+
 Route::get('/', function () {
     return view('home');
 });
@@ -27,9 +29,9 @@ Route::get('/deposit', function () {
     return view('deposit');
 });
 
-Route::get('/offer/create', function () {
-    return view('offer.create');
-});
+//Route::get('/offer/create', function () {
+//    return view('offer.create');
+//});
 
 Route::get('/discount/create', function () {
     return view('discount.create');

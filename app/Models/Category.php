@@ -24,5 +24,8 @@ class Category extends Model
         return $this->hasMany(Category::class);
     }
 
+    public function offers(){
+        return $this->hasMany('App\Models\Offer');
+    }
 
 }

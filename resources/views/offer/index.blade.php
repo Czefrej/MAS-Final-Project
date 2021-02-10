@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-@section('title', 'Categories list')
+@section('title', 'Offers list')
 
 @section('sidebar')
     @parent
@@ -10,7 +10,7 @@
 @section('content')
     <div class="login-clean">
 
-        <form id="form" method="post" action="{{route("category.store")}}" style="max-width: 700px"><h2 class="sr-only">Category</h2>
+        <form id="form" method="post" action="{{route("category.store")}}" style="max-width: 700px"><h2 class="sr-only">Offers</h2>
             @if(session()->has('message'))
                 <div class="alert alert-success">
                     {{ session()->get('message') }}
@@ -31,41 +31,45 @@
             @csrf
             @method("DELETE")
             <h2 class="sr-only">Login Form</h2>
-            <h1 style="text-align: center; margin: 0px 0px 100px 0px; margin-bottom: 30px;">Categories</h1>
+            <h1 style="text-align: center; margin: 0px 0px 100px 0px; margin-bottom: 30px;">Offers</h1>
             <header></header>
             <div class="table-responsive">
                 <table class="table">
                     <thead>
                     <tr>
                         <th class="text-center">Name</th>
-                        <th class="text-center">Parent Category</th>
+                        <th class="text-center">Stock</th>
+                        <th class="text-center">Price</th>
+                        <th class="text-center">Status</th>
                         <th class="text-center">Action</th>
                     </tr>
                     </thead>
                     <tbody>
-                        @foreach($categories as $c)
+                    @foreach($offers as $o)
                         <tr>
-                            <td class="text-center">{{$c->name}} (ID : <b>{{$c->id}}</b>)</td>
+                            <td class="text-center">{{$o->name}} (ID : <b>{{$o->id}}</b>)</td>
                             <td class="text-center">
-                                @if($c->parent_id != null)
-                                    {{$c->parent->name}} (ID : <b>{{$c->parent->id}}</b>)
-                                @else
-                                    None
-                                @endif
+                                {{$o->stock}}
+                            </td>
+                            <td class="text-center">
+                                {{$o->price}}
+                            </td>
+                            <td class="text-center">
+                                {{$o->status}}
                             </td>
                             <td class="text-center" style="  color: var(--blue);">
-                                <a href="{{route("category.edit",$c->id)}}" class="btn btn-link text-primary">Edit</a>
-                                <button class="btn btn-link text-primary" onclick="deleteitem({{$c->id}});return true;">Delete</button>
+                                <a href="{{route("offer.edit",$o->id)}}" class="btn btn-link text-primary">Edit</a>
+                                <button class="btn btn-link text-primary" onclick="deleteitem({{$o->id}});return true;">Delete</button>
                             </td>
 
                         </tr>
-                        @endforeach
+                    @endforeach
                     </tbody>
                 </table>
             </div>
 
             <div class="form-group">
-                <a href="{{route("category.create")}}" class="btn btn-primary btn-block" type="submit">Create a category</a>
+                <a href="{{route("offer.create")}}" class="btn btn-primary btn-block" type="submit">Create an offer</a>
             </div></form>
     </div>
 @stop
@@ -73,7 +77,7 @@
 @push('scripts')
     <script>
         function deleteitem(id){
-            $('#form').attr('action', "/category/"+id);
+            $('#form').attr('action', "/offer/"+id);
             $('#form').submit();
         }
 

@@ -18,7 +18,7 @@ class Offer extends Model
         'category_id'
     ];
 
-    protected $table = 'offer';
+    protected $table = 'offers';
     protected $primaryKey = 'id';
 
     public function category(){
