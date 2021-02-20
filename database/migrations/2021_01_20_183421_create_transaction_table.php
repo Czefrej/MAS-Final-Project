@@ -14,13 +14,16 @@ class CreateTransactionTable extends Migration
     public function up()
     {
         Schema::create('transaction', function (Blueprint $table) {
-            $table->id();
+            $table->id()->autoIncrement();
             $table->dateTime('transaction_datetime')->nullable(true);
-            $table->integer('product_id')->nullable(false);
-            $table->integer('user_id')->nullable(false);
+            $table->unsignedBigInteger('offer_id')->nullable(true);
+            $table->unsignedBigInteger('user_id')->nullable(true);
             $table->integer('quantity');
             $table->double('price');
             $table->timestamps();
+
+            $table->foreign('offer_id')->references("id")->on("offer")->onDelete("cascade");
+            $table->foreign('user_id')->references("id")->on("users")->onDelete("cascade");
         });
     }
 

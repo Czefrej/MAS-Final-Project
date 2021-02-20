@@ -13,30 +13,31 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::resource('category', \App\Http\Controllers\CategoryController::class);
+Route::resource('category', \App\Http\Controllers\CategoryController::class)->middleware("auth")->middleware("auth.admin");
 
-Route::resource('offer', \App\Http\Controllers\OfferController::class);
+Route::resource('offer', \App\Http\Controllers\OfferController::class)->middleware("auth")->middleware("auth.admin");
+
+Route::resource('discount', \App\Http\Controllers\DiscountController::class)->middleware("auth")->middleware("auth.admin");
+
+Route::resource('transaction', \App\Http\Controllers\TransactionController::class)->middleware("auth")->middleware("auth.admin");
+
 
 Route::get('/', function () {
     return view('home');
 });
 
-Route::get('/register', function () {
-    return view('register');
-});
+Route::get('/deposit', '\App\Http\Controllers\DepositController@index')->name('deposit.index')->middleware("auth");
+Route::post('/deposit', '\App\Http\Controllers\DepositController@store')->name('deposit.store')->middleware("auth");
 
-Route::get('/deposit', function () {
-    return view('deposit');
-});
+Route::get('/product/{category_id?}', '\App\Http\Controllers\ProductController@index');
 
-//Route::get('/offer/create', function () {
-//    return view('offer.create');
-//});
+Route::get('/buy/{id}', '\App\Http\Controllers\BuyController@purchase')->middleware("auth");
 
-Route::get('/discount/create', function () {
-    return view('discount.create');
-});
+Route::get('/register', '\App\Http\Controllers\Auth\AuthController@register')->name('register');
+Route::post('/register', '\App\Http\Controllers\Auth\AuthController@storeUser');
 
-//Route::get('/category/create', function () {
-//    return view('category.create');
-//});
+Route::get('/login', '\App\Http\Controllers\Auth\AuthController@login')->name('login');
+Route::post('/login', '\App\Http\Controllers\Auth\AuthController@authenticate');
+Route::get('logout', '\App\Http\Controllers\Auth\AuthController@logout')->name('logout');
+
+Route::get('/', '\App\Http\Controllers\Auth\AuthController@home')->name('home');

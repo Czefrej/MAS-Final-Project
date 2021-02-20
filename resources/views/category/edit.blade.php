@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-@section('title', 'Page Title')
+@section('title', 'Edit '.$category->name)
 
 @section('sidebar')
     @parent

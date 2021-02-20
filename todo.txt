@@ -1,1 +1,2 @@
 Add connection between creator and offer
+Delete discounts

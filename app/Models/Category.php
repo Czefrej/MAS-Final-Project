@@ -28,4 +28,8 @@ class Category extends Model
         return $this->hasMany('App\Models\Offer');
     }
 
+    public function discounts(){
+        return $this->hasMany(Discount::class);
+    }
+
 }

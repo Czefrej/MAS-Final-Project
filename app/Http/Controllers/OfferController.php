@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Offer;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -70,10 +71,11 @@ class OfferController extends Controller
         $offer->category_id = $request->parent_id;
         //to delete
         $offer->creator_id = 1;
+        Auth::user()->createdOffers()->save($offer);
         $cat->offers()->save($offer);
         $offer->save();
 
-        return redirect(route("offer.index"))->with('message', 'Category was successfully created.');
+        return redirect(route("offer.index"))->with('message', 'Offer was successfully created.');
     }
 
     /**

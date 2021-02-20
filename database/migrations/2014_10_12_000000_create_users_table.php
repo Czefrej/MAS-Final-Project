@@ -15,7 +15,7 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('username');
+            $table->string('name');
             $table->string('email')->unique();
             $table->enum("role",["player","admin"])->default("player");
             $table->timestamp('email_verified_at')->nullable();
@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->string("telephone_number",15)->nullable(true);
             $table->dateTime('promotion_date')->nullable(true);
-            $table->integer("balance")->nullable(true);
+            $table->integer("balance")->default(0)->nullable(true);
             $table->timestamps();
         });
     }

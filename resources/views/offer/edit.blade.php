@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-@section('title', $offer->name)
+@section('title', 'Edit '.$offer->name)
 
 @section('sidebar')
     @parent
