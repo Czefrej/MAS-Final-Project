@@ -55,7 +55,7 @@
                                 {{$o->price}}
                             </td>
                             <td class="text-center">
-                                {{$o->status}}
+                                {{str_replace("App\Models\\","",$o->offerable_type)}}
                             </td>
                             <td class="text-center" style="  color: var(--blue);">
                                 <a href="{{route("offer.edit",$o->id)}}" class="btn btn-link text-primary">Edit</a>

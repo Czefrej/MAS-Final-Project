@@ -53,7 +53,10 @@
                                 @continue;
                             @endif
                         @endif
+                        @if($o->offerable_type == "App\Models\InactiveOffer")
 
+                            @continue;
+                        @endif
                         @php($i++)
                         @php($category_discount = 0)
                         @if(sizeof($c->discounts) > 0)
@@ -94,11 +97,11 @@
                                     </b></s></small>
                                 @endif
                                 <h4>
-                                    @switch($o->status)
-                                        @case("ComingSoon")
+                                    @switch($o->offerable_type)
+                                        @case("App\Models\ComingSoonOffer")
                                             <span class="green">Coming soon</span>
                                         @break
-                                        @case("SoldOut")
+                                        @case("App\Models\SoldOffer")
                                         <span class="red">Sold Out</span>
                                         @break
                                     @endswitch

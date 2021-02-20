@@ -48,11 +48,11 @@
             </div>
             <div class="form-group">
                 <label for="status">Status</label>
-                @php($status_list = array("Inactive","SoldOut","Active","ComingSoon"))
+                @php($status_list = array("InactiveOffer","SoldOffer","ActiveOffer","ComingSoonOffer"))
 
                 <select name="status" class="form-control" required>
                     @foreach($status_list as $s)
-                        <option @if($s == $offer->status) selected @endif value="{{$s}}">{{$s}}</option>
+                        <option @if($s == str_replace("App\Models\\","",$offer->status)) selected @endif value="{{$s}}">{{$s}}</option>
                     @endforeach
                 </select>
             </div>

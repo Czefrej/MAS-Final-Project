@@ -21,11 +21,12 @@ class CreateOfferTable extends Migration
             $table->integer("stock")->nullable(false)->default(0);
             $table->unsignedBigInteger("creator_id")->nullable(false);
             $table->unsignedBigInteger("category_id")->nullable(false);
-            $table->enum("status", ["Inactive", "SoldOut", "Active", "ComingSoon"])->default("Inactive");
-            $table->dateTime("deactivation_date")->useCurrent()->nullable(true);
-            $table->dateTime("out_of_stock_date")->default(null)->nullable(true);
-            $table->dateTime("restock_date")->default(null)->nullable(true);
-            $table->dateTime("activation_date")->default(null)->nullable(true);
+            $table->string('offerable_type')->nullable(false);
+            $table->unsignedBigInteger("offerable_id")->nullable(false);
+            //$table->enum("status", ["Inactive", "SoldOut", "Active", "ComingSoon"])->default("Inactive");
+//            $table->dateTime("out_of_stock_date")->default(null)->nullable(true);
+//            $table->dateTime("restock_date")->default(null)->nullable(true);
+//            $table->dateTime("activation_date")->default(null)->nullable(true);
             $table->timestamps();
 
             $table->foreign('category_id')->references("id")->on("category")->onDelete("cascade");;

@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActiveOffer;
 use App\Models\Category;
+use App\Models\ComingSoonOffer;
+use App\Models\InactiveOffer;
 use App\Models\Offer;
+use App\Models\SoldOffer;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -62,17 +66,32 @@ class OfferController extends Controller
             throw ValidationException::withMessages(['parent_id' => 'You have to provide id of a existing category']);
         }
 
-
+//        switch ($request->offer){
+//            case "ActiveOffer":
+//                $offer_type = ActiveOffer::create();
+//                break;
+//            case "ComingSoonOffer":
+//                $offer_type = ComingSoonOffer::create();
+//                break;
+//            case "InactiveOffer":
+//                $offer_type = InactiveOffer::create();
+//                break;
+//            case "SoldOffer":
+//                $offer_type = SoldOffer::create();
+//                break;
+//        }
+        $offer_type = InactiveOffer::create();
         $offer = new Offer;
         $offer->name = $request->name;
         $offer->price = $request->price;
         $offer->stock = $request->stock;
         $offer->description = $request->description;
         $offer->category_id = $request->parent_id;
-        //to delete
-        $offer->creator_id = 1;
+        $offer->offerable_type = "App\Models\Inactive";
+        $offer->offerable_id = $offer_type->id;
         Auth::user()->createdOffers()->save($offer);
         $cat->offers()->save($offer);
+        $offer_type->offer()->save($offer);
         $offer->save();
 
         return redirect(route("offer.index"))->with('message', 'Offer was successfully created.');
@@ -134,7 +153,7 @@ class OfferController extends Controller
             'stock'=>'required|integer|min:0',
             'price'=>'required|numeric|min:0',
             'description'=>'max:8000|nullable',
-            'status'=>'required|max:100'
+            'status'=>'required|max:100|in:ActiveOffer,InactiveOffer,SoldOffer,ComingSoonOffer'
         ]);
         try{
             $category = Category::where("id",$request->parent_id)->firstOrFail();
@@ -147,10 +166,26 @@ class OfferController extends Controller
         $offer->name = $request->name;
         $offer->stock = $request->stock;
         $offer->description = $request->description;
-        $offer->status = $request->status;
         $offer->price = $request->price;
         $category->offers()->save($offer);
         $offer->save();
+        if(str_replace("App\Models\\","",$offer->offerable_type) != $request->status) {
+            $offerable = $offer->offerable()->first();
+            switch ($request->status) {
+                case "ActiveOffer":
+                    $offerable->activate();
+                    break;
+                case "ComingSoonOffer":
+                    $offerable->comingsoon();
+                    break;
+                case "InactiveOffer":
+                    $offerable->deactivate();
+                    break;
+                case "SoldOffer":
+                    $offerable->sold();
+                    break;
+            }
+        }
 
         return redirect(route("offer.index"))->with('message','Offer was successfully updated.');
     }
@@ -168,6 +203,7 @@ class OfferController extends Controller
         } catch (ModelNotFoundException $e) {
             throw ValidationException::withMessages(['id' => 'You have to provide id of existing offer']);
         }
+        $offer->offerable()->first()->delete();
         $offer->delete();
         return redirect()->back()->with('message', 'Offer was successfully deleted.');
     }

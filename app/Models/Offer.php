@@ -21,6 +21,11 @@ class Offer extends Model
     protected $table = 'offer';
     protected $primaryKey = 'id';
 
+
+    public function offerable(){
+        return $this->morphTo();
+    }
+
     public function category(){
         return $this->belongsTo(Category::class);
     }
